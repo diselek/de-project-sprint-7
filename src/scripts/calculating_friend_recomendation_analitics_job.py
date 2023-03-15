@@ -81,7 +81,7 @@ def main():
         .withColumn("arr",F.array_sort(F.array(*cols)))
         .drop_duplicates(["arr"]).drop("channel_id", "arr")
         .filter(F.col("user_left") != F.col("user_right"))
-        .withColumn("hash", F.hash(F.concat(F.col('user_left'),F.col('user_right')))))
+        ))
 
 
     #создаем df по людям которые общались (переписывались - имеют пары message_from message_to и наоборот)
