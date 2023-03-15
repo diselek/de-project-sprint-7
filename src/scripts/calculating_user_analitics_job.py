@@ -74,8 +74,8 @@ def main():
     df_csv = df_csv.withColumn("lat",regexp_replace("lat", ",", ".")).withColumn("lng",regexp_replace("lng",",","."))
     df_citygeodata = df_csv.select(F.col("id").cast(LongType()).alias("city_id"),(F.col("city")).alias("city_name"),(F.col("lat")).cast(DoubleType()).alias("city_lat"),(F.col("lng")).cast(DoubleType()).alias("city_lon"))
 
-    #Оставлю только два крупных города (так как действительно вы писали что мое решение будет падать, но и в вашем готовым решении он не нашел часть городов из файла)
-    df_citygeodata = df_citygeodata.filter(F.col('city_id')<3)
+    
+    #df_citygeodata = df_citygeodata.filter(F.col('city_id')<3)
 
     #Получение DF события перемноженные на список городов - для дальнейшего вычисления растояния до города
     df_message_and_citygeodata = (df_message.crossJoin(
