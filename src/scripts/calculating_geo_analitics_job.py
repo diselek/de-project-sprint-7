@@ -242,8 +242,8 @@ def main():
     #df_count_subscription
     df_geo_analitics_mart = (
         df_count_message.join(df_count_reg, ['zone_id','week','month'],how = 'full')
-        .join(df_count_reaction, ['zone_id','week','month'], how='left')
-        .join(df_count_subscription, ['zone_id','week','month'], how='left')
+        .join(df_count_reaction, ['zone_id','week','month'], how='full')
+        .join(df_count_subscription, ['zone_id','week','month'], how='full')
     )
 
     #Сохранение витрины для аналитиков на hdfs 
