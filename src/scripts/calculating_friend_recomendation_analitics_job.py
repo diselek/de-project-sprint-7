@@ -81,7 +81,7 @@ def main():
         .withColumn("arr",F.array_sort(F.array(*cols)))
         .drop_duplicates(["arr"]).drop("channel_id", "arr")
         .filter(F.col("user_left") != F.col("user_right"))
-        ))
+        )
 
 
     #создаем df по людям которые общались (переписывались - имеют пары message_from message_to и наоборот)
@@ -106,14 +106,15 @@ def main():
         .withColumn("arr", F.array_sort(F.array(*cols)))
         .drop_duplicates(["arr"])
         .drop("arr")
-        .withColumn("hash", F.hash(F.concat(F.col('user_left'),F.col('user_right'))))
         .filter(F.col("user_left") != F.col("user_right")))
 
     df_subscriptions_without_communication = (df_subscriptions.join(df_user_communications
         .withColumnRenamed("user_right", "user_right_temp")
-        .withColumnRenamed("user_left", "user_left_temp"), on=["hash"], how='left')
+        .withColumnRenamed("user_left", "user_left_temp"), 
+        ((df_subscriptions.user_right == df_user_communications.user_right_temp) 
+         & (df_subscriptions.user_left == df_user_communications.user_left_temp)), how='left')
         .where(F.col("user_right_temp").isNull())
-        .drop("user_right_temp","user_left_temp", "hash")
+        .drop("user_right_temp","user_left_temp")
         .where(F.col("user_left") != 0)
         .filter(F.col("user_left") != F.col("user_right")))
 
